@@ -1,0 +1,191 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* WorkOS Light Theme */
+    --background: 0 0% 98%;
+    --foreground: 224 71% 4%;
+    --card: 0 0% 100%;
+    --card-foreground: 224 71% 4%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71% 4%;
+    --primary: 245 75% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 224 71% 4%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;
+    --accent: 220 14% 96%;
+    --accent-foreground: 224 71% 4%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 245 75% 60%;
+    --radius: 0.75rem;
+    --sidebar-background: 224 71% 4%;
+    --sidebar-foreground: 215 20% 85%;
+    --sidebar-primary: 245 75% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 224 40% 10%;
+    --sidebar-accent-foreground: 215 20% 90%;
+    --sidebar-border: 224 40% 14%;
+    --sidebar-ring: 245 75% 60%;
+  }
+
+  .dark {
+    /* WorkOS Dark Theme */
+    --background: 224 71% 4%;
+    --foreground: 215 20% 92%;
+    --card: 224 40% 7%;
+    --card-foreground: 215 20% 92%;
+    --popover: 224 40% 7%;
+    --popover-foreground: 215 20% 92%;
+    --primary: 245 75% 65%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 224 40% 10%;
+    --secondary-foreground: 215 20% 92%;
+    --muted: 224 40% 10%;
+    --muted-foreground: 215 20% 50%;
+    --accent: 224 40% 12%;
+    --accent-foreground: 215 20% 92%;
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 224 40% 14%;
+    --input: 224 40% 12%;
+    --ring: 245 75% 65%;
+    --sidebar-background: 224 71% 2%;
+    --sidebar-foreground: 215 20% 80%;
+    --sidebar-primary: 245 75% 65%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 224 40% 8%;
+    --sidebar-accent-foreground: 215 20% 90%;
+    --sidebar-border: 224 40% 10%;
+    --sidebar-ring: 245 75% 65%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    font-feature-settings: "cv11", "ss01";
+    font-variation-settings: "opsz" auto;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/30;
+  }
+
+  ::selection {
+    @apply bg-primary/20 text-foreground;
+  }
+}
+
+@layer components {
+  /* ── Glass Card ────────────────────────────────────────────────── */
+  .glass-card {
+    @apply bg-card/80 backdrop-blur-sm border border-border/50 rounded-2xl;
+  }
+
+  .glass-card-hover {
+    @apply glass-card transition-all duration-200 hover:shadow-lg hover:shadow-primary/5 hover:border-primary/20;
+  }
+
+  /* ── Gradient Text ─────────────────────────────────────────────── */
+  .gradient-text {
+    @apply bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent;
+  }
+
+  /* ── Status Badges ─────────────────────────────────────────────── */
+  .status-active { @apply bg-emerald-500/10 text-emerald-400 border border-emerald-500/20; }
+  .status-completed { @apply bg-blue-500/10 text-blue-400 border border-blue-500/20; }
+  .status-on-hold { @apply bg-amber-500/10 text-amber-400 border border-amber-500/20; }
+  .status-planning { @apply bg-violet-500/10 text-violet-400 border border-violet-500/20; }
+  .status-cancelled { @apply bg-red-500/10 text-red-400 border border-red-500/20; }
+
+  /* ── Priority Badges ───────────────────────────────────────────── */
+  .priority-urgent { @apply text-red-400; }
+  .priority-high { @apply text-orange-400; }
+  .priority-medium { @apply text-yellow-400; }
+  .priority-low { @apply text-blue-400; }
+  .priority-none { @apply text-muted-foreground; }
+
+  /* ── Sidebar Item ──────────────────────────────────────────────── */
+  .sidebar-item {
+    @apply flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-150 cursor-pointer;
+    @apply text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground;
+  }
+
+  .sidebar-item-active {
+    @apply bg-sidebar-primary/15 text-sidebar-primary;
+  }
+
+  /* ── KPI Card ──────────────────────────────────────────────────── */
+  .kpi-card {
+    @apply glass-card p-6 flex flex-col gap-2;
+  }
+
+  /* ── Kanban Column ─────────────────────────────────────────────── */
+  .kanban-col {
+    @apply flex flex-col gap-3 bg-muted/40 rounded-2xl p-3 min-w-[280px] max-w-[280px];
+  }
+
+  /* ── Empty State ───────────────────────────────────────────────── */
+  .empty-state {
+    @apply flex flex-col items-center justify-center py-20 gap-4 text-center;
+  }
+
+  /* ── Page Header ───────────────────────────────────────────────── */
+  .page-header {
+    @apply flex items-center justify-between pb-6 mb-6 border-b border-border/50;
+  }
+
+  /* ── Input Group ───────────────────────────────────────────────── */
+  .input-group {
+    @apply flex flex-col gap-1.5;
+  }
+
+  /* ── Shimmer Skeleton ──────────────────────────────────────────── */
+  .skeleton {
+    @apply animate-pulse bg-muted rounded-xl;
+  }
+
+  /* ── Ring Glow ─────────────────────────────────────────────────── */
+  .ring-glow {
+    @apply ring-2 ring-primary/30 ring-offset-2 ring-offset-background;
+  }
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  .glow-primary {
+    box-shadow: 0 0 30px -10px hsl(var(--primary) / 0.4);
+  }
+}
