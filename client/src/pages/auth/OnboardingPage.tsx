@@ -80,7 +80,7 @@ export default function OnboardingPage() {
       setStep(1);
     } catch (error) {
       console.error('[OnboardingPage] createOrg error:', error);
-      const message = error?.message || String(error) || 'Failed to create organization. Please try again.';
+      const message = error instanceof Error ? error.message : String(error) || 'Failed to create organization. Please try again.';
       toast.error(`Error: ${message}`);
     }
   };
@@ -104,7 +104,7 @@ export default function OnboardingPage() {
       navigate('/dashboard');
     } catch (error) {
       console.error('[OnboardingPage] createWorkspace error:', error);
-      const message = error?.message || String(error) || 'Failed to create workspace.';
+      const message = error instanceof Error ? error.message : String(error) || 'Failed to create workspace.';
       toast.error(`Error: ${message}`);
     } finally {
       setCreating(false);
