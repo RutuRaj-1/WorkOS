@@ -49,8 +49,12 @@ export default function RegisterPage() {
     try {
       await signInWithGoogle();
       navigate('/onboarding');
-    } catch {
-      toast.error('Google sign-in failed. Please try again.');
+    } catch (err: unknown) {
+      console.error('Google sign-in error', err);
+      const msg = err instanceof Error ? err.message : 'Google sign-in failed. Please try again.';
+      toast.error(msg.includes('unauthorized-domain')
+        ? 'Google sign-in blocked: add your Netlify domain to Firebase Auth authorized domains.'
+        : msg);
     } finally {
       setGoogleLoading(false);
     }
