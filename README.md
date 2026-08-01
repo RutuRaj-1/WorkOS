@@ -69,6 +69,13 @@ cd work-tracker
    VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
    VITE_FIREBASE_APP_ID=your_app_id
    ```
+3. Add Firebase authorized domains:
+   - Go to Firebase Console → Authentication → Sign-in method → Authorized domains.
+   - Add your Netlify site domain, for example `your-site.netlify.app`.
+   - Also keep `localhost` and your Firebase project auth domain like `your_project_id.firebaseapp.com`.
+
+   This step is required for Google sign-in to work in production.
+
 
 ### 3. Setup Server Environment
 1. Navigate to the server directory:
