@@ -140,7 +140,7 @@ export default function EntityPage() {
           { id: 'overview', label: 'Overview & Custom Fields', icon: Trophy },
           { id: 'tasks', label: `Tasks (${tasks.length})`, icon: CheckSquare },
           { id: 'knowledge', label: 'Knowledge & Notes', icon: FileText },
-          { id: 'finance', label: `Finance ($${totalExpense})`, icon: DollarSign },
+          { id: 'finance', label: `Finance (₹${totalExpense})`, icon: DollarSign },
           { id: 'discussion', label: `Discussion (${comments.length})`, icon: MessageSquare },
         ].map(tab => (
           <button

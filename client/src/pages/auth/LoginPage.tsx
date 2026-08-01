@@ -4,7 +4,8 @@ import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Eye, EyeOff, Mail, Lock, Zap, ArrowRight, Globe } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, ArrowRight, Globe } from 'lucide-react';
+import logo from '@/assets/logo.png';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
@@ -70,10 +71,8 @@ export default function LoginPage() {
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-indigo-600/20 rounded-full blur-3xl" />
 
         {/* Logo */}
-        <div className="relative z-10 flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-400 to-violet-500 flex items-center justify-center">
-            <Zap className="w-5 h-5 text-white" />
-          </div>
+        <div className="relative z-10 flex items-center gap-3">
+          <img src={logo} alt="WorkOS logo" className="w-10 h-10 rounded-2xl object-contain bg-white/10 p-2" />
           <span className="text-white font-bold text-lg tracking-tight">WorkOS</span>
         </div>
 
@@ -130,10 +129,8 @@ export default function LoginPage() {
           className="w-full max-w-[380px]"
         >
           {/* Mobile logo */}
-          <div className="flex items-center gap-2 mb-8 lg:hidden">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center">
-              <Zap className="w-4 h-4 text-white" />
-            </div>
+          <div className="flex items-center gap-3 mb-8 lg:hidden">
+            <img src={logo} alt="WorkOS logo" className="w-9 h-9 rounded-2xl object-contain bg-white/5 p-2" />
             <span className="font-bold text-lg">WorkOS</span>
           </div>
 

@@ -39,20 +39,6 @@ const queryClient = new QueryClient({
   },
 });
 
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { currentUser, loading } = useAuth();
-  if (loading) return <SplashScreen />;
-  if (!currentUser) return <Navigate to="/login" replace />;
-  return <>{children}</>;
-}
-
-function PublicRoute({ children }: { children: React.ReactNode }) {
-  const { currentUser, loading } = useAuth();
-  if (loading) return <SplashScreen />;
-  if (currentUser) return <Navigate to="/dashboard" replace />;
-  return <>{children}</>;
-}
-
 function SplashScreen() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center">
@@ -74,6 +60,46 @@ function SplashScreen() {
   );
 }
 
+/**
+ * ProtectedRoute:
+ *  - If loading → splash
+ *  - If not logged in → /login
+ *  - If logged in but no orgId → /onboarding (must complete setup)
+ *  - Otherwise → render children
+ */
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const { currentUser, userProfile, loading, profileLoading } = useAuth();
+
+  // Auth state still being resolved
+  if (loading || profileLoading) return <SplashScreen />;
+  if (!currentUser) return <Navigate to="/login" replace />;
+
+  // User is authenticated but profile confirmed has no orgId → onboarding
+  if (userProfile !== null && !userProfile?.orgId) {
+    return <Navigate to="/onboarding" replace />;
+  }
+
+  // Profile unexpectedly null after loading (edge case) — show splash briefly
+  if (userProfile === null) return <SplashScreen />;
+
+  return <>{children}</>;
+}
+
+function PublicRoute({ children }: { children: React.ReactNode }) {
+  const { currentUser, userProfile, loading, profileLoading } = useAuth();
+  if (loading || profileLoading) return <SplashScreen />;
+  if (currentUser && userProfile?.orgId) return <Navigate to="/dashboard" replace />;
+  return <>{children}</>;
+}
+
+/** Onboarding route: accessible only when logged in */
+function OnboardingRoute({ children }: { children: React.ReactNode }) {
+  const { currentUser, loading } = useAuth();
+  if (loading) return <SplashScreen />;
+  if (!currentUser) return <Navigate to="/login" replace />;
+  return <>{children}</>;
+}
+
 function AppRoutes() {
   return (
     <Routes>
@@ -81,7 +107,7 @@ function AppRoutes() {
       <Route path="/register" element={<PublicRoute><RegisterPage /></PublicRoute>} />
       <Route path="/forgot-password" element={<PublicRoute><ForgotPasswordPage /></PublicRoute>} />
 
-      <Route path="/onboarding" element={<ProtectedRoute><OnboardingPage /></ProtectedRoute>} />
+      <Route path="/onboarding" element={<OnboardingRoute><OnboardingPage /></OnboardingRoute>} />
 
       <Route path="/" element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
         <Route index element={<Navigate to="/dashboard" replace />} />

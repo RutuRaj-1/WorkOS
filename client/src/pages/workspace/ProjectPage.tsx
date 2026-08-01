@@ -148,7 +148,7 @@ export default function ProjectPage() {
           </div>
           <div>
             <span className="text-muted-foreground block">Total Expenses</span>
-            <span className="font-semibold text-amber-400">${totalExpense.toLocaleString()}</span>
+            <span className="font-semibold text-amber-400">₹{totalExpense.toLocaleString()}</span>
           </div>
         </div>
       </div>
@@ -158,7 +158,7 @@ export default function ProjectPage() {
         {[
           { id: 'overview', label: 'Overview', icon: Trophy },
           { id: 'tasks', label: `Tasks (${tasks.length})`, icon: CheckSquare },
-          { id: 'expenses', label: `Expenses ($${totalExpense})`, icon: DollarSign },
+          { id: 'expenses', label: `Expenses (₹${totalExpense})`, icon: DollarSign },
           { id: 'discussion', label: `Discussion (${comments.length})`, icon: MessageSquare },
         ].map(tab => (
           <button
@@ -261,7 +261,7 @@ export default function ProjectPage() {
                   <p className="text-sm font-medium">{e.description}</p>
                   <span className="text-xs text-muted-foreground capitalize">{e.category}</span>
                 </div>
-                <span className="text-sm font-bold text-amber-400">${e.amount}</span>
+                <span className="text-sm font-bold text-amber-400">₹{e.amount}</span>
               </div>
             ))
           )}

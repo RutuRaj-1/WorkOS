@@ -4,7 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Building2, Zap, ArrowRight, Check } from 'lucide-react';
+import { Building2, ArrowRight, Check } from 'lucide-react';
+import logo from '@/assets/logo.png';
 import { collection, addDoc, doc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
@@ -60,10 +61,10 @@ export default function OnboardingPage() {
         ownerId: currentUser.uid,
         members: [{
           uid: currentUser.uid,
-          email: currentUser.email,
-          displayName: currentUser.displayName,
+          email: currentUser.email || '',
+          displayName: currentUser.displayName || 'User',
           role: 'admin',
-          joinedAt: serverTimestamp(),
+          joinedAt: new Date(),
         }],
         plan: 'free',
         createdAt: serverTimestamp(),
@@ -77,8 +78,10 @@ export default function OnboardingPage() {
       setOrgId(orgRef.id);
       await refreshProfile();
       setStep(1);
-    } catch {
-      toast.error('Failed to create organization. Please try again.');
+    } catch (error) {
+      console.error('[OnboardingPage] createOrg error:', error);
+      const message = error?.message || String(error) || 'Failed to create organization. Please try again.';
+      toast.error(`Error: ${message}`);
     }
   };
 
@@ -99,8 +102,10 @@ export default function OnboardingPage() {
 
       toast.success('Workspace created! Welcome to WorkOS 🎉');
       navigate('/dashboard');
-    } catch {
-      toast.error('Failed to create workspace.');
+    } catch (error) {
+      console.error('[OnboardingPage] createWorkspace error:', error);
+      const message = error?.message || String(error) || 'Failed to create workspace.';
+      toast.error(`Error: ${message}`);
     } finally {
       setCreating(false);
     }
@@ -110,10 +115,8 @@ export default function OnboardingPage() {
     <div className="min-h-screen bg-background flex items-center justify-center p-6">
       <div className="w-full max-w-[480px]">
         {/* Logo */}
-        <div className="flex items-center gap-2.5 mb-10 justify-center">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center">
-            <Zap className="w-5 h-5 text-white" />
-          </div>
+        <div className="flex items-center gap-3 mb-10 justify-center">
+          <img src={logo} alt="WorkOS logo" className="w-12 h-12 rounded-2xl object-contain bg-white/5 p-2" />
           <span className="font-bold text-xl">WorkOS</span>
         </div>
 

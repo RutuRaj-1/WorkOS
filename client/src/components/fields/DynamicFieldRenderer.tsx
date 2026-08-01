@@ -36,7 +36,7 @@ export default function DynamicFieldRenderer({
       case 'currency':
         return (
           <span className="text-sm font-mono font-medium text-emerald-400">
-            {field.currencySymbol || '$'}{Number(value).toLocaleString()}
+            {field.currencySymbol || '₹'}{Number(value).toLocaleString()}
           </span>
         );
 

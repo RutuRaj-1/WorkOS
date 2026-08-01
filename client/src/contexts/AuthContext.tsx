@@ -20,6 +20,7 @@ interface AuthContextType {
   currentUser: FirebaseUser | null;
   userProfile: User | null;
   loading: boolean;
+  profileLoading: boolean;
   signUp: (email: string, password: string, displayName: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
@@ -40,7 +41,10 @@ export function useAuth() {
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
   const [userProfile, setUserProfile] = useState<User | null>(null);
+  // loading = true until Firebase auth state is known
   const [loading, setLoading] = useState(true);
+  // profileLoading = true while fetching Firestore profile (separate from auth loading)
+  const [profileLoading, setProfileLoading] = useState(false);
 
   const fetchUserProfile = async (uid: string): Promise<User | null> => {
     try {
@@ -50,19 +54,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return { id: snap.id, ...snap.data() } as User;
       }
       return null;
-    } catch {
+    } catch (err) {
+      console.error('[AuthContext] fetchUserProfile error:', err);
       return null;
     }
   };
 
   const createUserProfile = async (user: FirebaseUser, displayName?: string): Promise<User> => {
+    const now = serverTimestamp();
     const profile: Omit<User, 'id'> = {
       email: user.email || '',
       displayName: displayName || user.displayName || 'User',
       photoURL: user.photoURL || undefined,
-      role: 'admin', // First user is admin — org owner
+      role: 'admin',
       isActive: true,
-      createdAt: serverTimestamp() as never,
+      createdAt: now as never,
+      updatedAt: now as never,
     };
 
     await setDoc(doc(db, COLLECTIONS.USERS, user.uid), profile);
@@ -71,14 +78,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const refreshProfile = async () => {
     if (!currentUser) return;
-    const profile = await fetchUserProfile(currentUser.uid);
-    setUserProfile(profile);
+    setProfileLoading(true);
+    try {
+      const profile = await fetchUserProfile(currentUser.uid);
+      setUserProfile(profile);
+    } finally {
+      setProfileLoading(false);
+    }
   };
 
   const signUp = async (email: string, password: string, displayName: string) => {
     const { user } = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(user, { displayName });
-    await createUserProfile(user, displayName);
+    const profile = await createUserProfile(user, displayName);
+    setUserProfile(profile);
     await sendEmailVerification(user);
   };
 
@@ -91,13 +104,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const { user } = await signInWithPopup(auth, provider);
     const existing = await fetchUserProfile(user.uid);
     if (!existing) {
-      await createUserProfile(user);
+      const profile = await createUserProfile(user);
+      setUserProfile(profile);
+    } else {
+      setUserProfile(existing);
     }
   };
 
   const logout = async () => {
     await signOut(auth);
     setUserProfile(null);
+    setCurrentUser(null);
   };
 
   const resetPassword = async (email: string) => {
@@ -113,12 +130,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user);
+
       if (user) {
-        const profile = await fetchUserProfile(user.uid);
-        setUserProfile(profile);
+        setProfileLoading(true);
+        try {
+          const profile = await fetchUserProfile(user.uid);
+          setUserProfile(profile);
+        } finally {
+          setProfileLoading(false);
+        }
       } else {
         setUserProfile(null);
       }
+
       setLoading(false);
     });
 
@@ -129,6 +153,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     currentUser,
     userProfile,
     loading,
+    profileLoading,
     signUp,
     signIn,
     signInWithGoogle,

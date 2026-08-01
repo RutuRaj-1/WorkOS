@@ -15,7 +15,7 @@ const FIELD_TYPES: { type: CustomFieldType; label: string; description: string }
   { type: 'text', label: 'Single Text', description: 'Short plain text line' },
   { type: 'longtext', label: 'Long Text', description: 'Multi-line notes and descriptions' },
   { type: 'number', label: 'Number', description: 'Numeric values' },
-  { type: 'currency', label: 'Currency', description: 'Monetary amounts ($/€/₹)' },
+  { type: 'currency', label: 'Currency', description: 'Monetary amounts (₹)' },
   { type: 'date', label: 'Date', description: 'Calendar date selection' },
   { type: 'checkbox', label: 'Checkbox', description: 'Yes/No boolean toggle' },
   { type: 'dropdown', label: 'Dropdown', description: 'Single option selection' },

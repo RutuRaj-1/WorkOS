@@ -1,8 +1,8 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { Search, Bell, Sun, Moon, Plus, Command } from 'lucide-react';
+import { Search, Bell, Sun, Moon, Plus, Command, Menu } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { setGlobalSearchOpen, setCommandPaletteOpen, toggleTheme } from '@/store/slices/uiSlice';
+import { setGlobalSearchOpen, setCommandPaletteOpen, toggleTheme, setSidebarOpen } from '@/store/slices/uiSlice';
 import { togglePanel } from '@/store/slices/notificationSlice';
 import { cn } from '@/lib/utils';
 
@@ -31,9 +31,17 @@ export default function Header() {
   const breadcrumbs = useBreadcrumbs();
 
   return (
-    <header className="h-14 border-b border-border/50 bg-background/80 backdrop-blur-sm flex items-center px-6 gap-4 sticky top-0 z-30 shrink-0">
+    <header className="h-14 border-b border-border/50 bg-background/80 backdrop-blur-sm flex items-center px-4 sm:px-6 gap-3 sticky top-0 z-30 shrink-0">
+      <button
+        onClick={() => dispatch(setSidebarOpen(true))}
+        className="lg:hidden w-10 h-10 rounded-lg hover:bg-muted flex items-center justify-center transition-colors text-muted-foreground hover:text-foreground"
+        aria-label="Open sidebar"
+      >
+        <Menu className="w-5 h-5" />
+      </button>
+
       {/* Breadcrumbs */}
-      <nav className="flex items-center gap-1.5 text-sm flex-1">
+      <nav className="flex items-center gap-1.5 text-sm flex-1 overflow-hidden">
         {breadcrumbs.map((crumb, i) => (
           <React.Fragment key={i}>
             {i > 0 && <span className="text-muted-foreground/40">/</span>}
