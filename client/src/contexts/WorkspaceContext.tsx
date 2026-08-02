@@ -5,8 +5,9 @@ import {
   onSnapshot,
   query,
   where,
-  orderBy,
   addDoc,
+  updateDoc,
+  deleteDoc,
   serverTimestamp,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -25,6 +26,8 @@ interface WorkspaceContextType {
     emoji: string;
     description?: string;
   }) => Promise<Workspace>;
+  updateWorkspace: (id: string, data: Partial<Pick<Workspace, 'name' | 'description' | 'color' | 'emoji'>>) => Promise<void>;
+  deleteWorkspace: (id: string) => Promise<void>;
 }
 
 const WorkspaceContext = createContext<WorkspaceContextType>({} as WorkspaceContextType);
@@ -128,9 +131,29 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     [currentUser, userProfile]
   );
 
+  /**
+   * updateWorkspace — rename/re-describe a workspace
+   */
+  const updateWorkspace = useCallback(
+    async (id: string, data: Partial<Pick<Workspace, 'name' | 'description' | 'color' | 'emoji'>>) => {
+      await updateDoc(doc(db, COLLECTIONS.WORKSPACES, id), {
+        ...data,
+        updatedAt: serverTimestamp(),
+      });
+    },
+    []
+  );
+
+  /**
+   * deleteWorkspace — hard delete
+   */
+  const deleteWorkspace = useCallback(async (id: string) => {
+    await deleteDoc(doc(db, COLLECTIONS.WORKSPACES, id));
+  }, []);
+
   return (
     <WorkspaceContext.Provider
-      value={{ workspaces, activeWorkspace, setActiveWorkspace, loading, createWorkspace }}
+      value={{ workspaces, activeWorkspace, setActiveWorkspace, loading, createWorkspace, updateWorkspace, deleteWorkspace }}
     >
       {children}
     </WorkspaceContext.Provider>

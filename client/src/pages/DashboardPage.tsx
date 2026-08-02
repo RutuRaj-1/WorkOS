@@ -7,7 +7,7 @@ import { useWorkspace } from '@/contexts/WorkspaceContext';
 import { COLLECTIONS } from '@/lib/collections';
 import { Task, ActivityLog, Goal, Expense } from '@/types';
 import {
-  CheckSquare, Clock, TrendingUp, DollarSign, Target,
+  CheckSquare, Clock, TrendingUp, IndianRupee, Target,
   Activity, Zap, ArrowUpRight, Calendar, Plus, Folder, Bell
 } from 'lucide-react';
 import { format, isToday, isTomorrow, startOfDay, endOfDay, addDays } from 'date-fns';

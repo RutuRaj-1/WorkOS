@@ -28,7 +28,6 @@ import AnalyticsPage from '@/pages/AnalyticsPage';
 import FinancePage from '@/pages/FinancePage';
 import NotificationsPage from '@/pages/NotificationsPage';
 import SettingsPage from '@/pages/settings/SettingsPage';
-import AutomationBuilder from '@/components/automations/AutomationBuilder';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -121,7 +120,6 @@ function AppRoutes() {
         <Route path="documents" element={<DocumentsPage />} />
         <Route path="analytics" element={<AnalyticsPage />} />
         <Route path="finance" element={<FinancePage />} />
-        <Route path="automations" element={<AutomationBuilder />} />
         <Route path="notifications" element={<NotificationsPage />} />
         <Route path="settings/*" element={<SettingsPage />} />
       </Route>

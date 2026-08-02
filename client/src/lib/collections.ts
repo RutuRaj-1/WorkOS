@@ -21,4 +21,5 @@ export const COLLECTIONS = {
   MEETINGS: 'meetings',
   SCRAPED_COMPETITIONS: 'scrapedCompetitions',
   AUTOMATIONS: 'automations',
+  TEAMMATES: 'teammates',
 } as const;

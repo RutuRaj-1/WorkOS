@@ -9,7 +9,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { COLLECTIONS } from '@/lib/collections';
 import { Project, Task, Expense, Comment, WorkDocument } from '@/types';
 import {
-  Trophy, Globe, Calendar as CalendarIcon, CheckSquare, DollarSign,
+  Trophy, Globe, Calendar as CalendarIcon, CheckSquare, IndianRupee,
   FileText, MessageSquare, Activity, ExternalLink, Plus, Sparkles, User
 } from 'lucide-react';
 import { format } from 'date-fns';
@@ -158,7 +158,7 @@ export default function ProjectPage() {
         {[
           { id: 'overview', label: 'Overview', icon: Trophy },
           { id: 'tasks', label: `Tasks (${tasks.length})`, icon: CheckSquare },
-          { id: 'expenses', label: `Expenses (₹${totalExpense})`, icon: DollarSign },
+          { id: 'expenses', label: `Expenses (₹${totalExpense})`, icon: IndianRupee },
           { id: 'discussion', label: `Discussion (${comments.length})`, icon: MessageSquare },
         ].map(tab => (
           <button

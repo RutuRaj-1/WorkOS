@@ -118,6 +118,24 @@ export interface Module extends BaseDocument {
 export type MainTab = Module;
 export type SubTab = Module;
 
+// ── Competition Round ────────────────────────────────────────────────────────
+export interface CompetitionRound {
+  name: string;        // e.g. "R-1", "R-2", "R-3", "Final Event"
+  deadline?: string;   // ISO date string
+  requirement?: string;
+  status?: 'upcoming' | 'ongoing' | 'completed' | 'skipped';
+}
+
+// ── Teammate Admin Participation ─────────────────────────────────────────────
+export interface InvitedMember {
+  uid: string;
+  name: string;
+  email?: string;
+  role?: string;        // 'Owner' | 'Admin'
+  status: 'pending' | 'accepted' | 'declined';
+  respondedAt?: string;
+}
+
 // ── Dynamic Entity Record System ──────────────────────────────────────────────
 export interface Entity extends BaseDocument {
   moduleId: string;
@@ -125,24 +143,37 @@ export interface Entity extends BaseDocument {
   mainTabId?: string;
   workspaceId: string;
   orgId: string;
+  // Core competition event fields (matches spreadsheet)
+  eventNo?: number;
   name: string;
   description?: string;
-  organizer?: string;
+  teamMembers?: string[];          // Names of participants
+  invitedMembers?: InvitedMember[]; // Structured participation approval status
+  link?: string;                   // URL to the competition
+  status?: string;                 // Upcoming / Ongoing / Completed / Not Selected / Cancelled
+  organizer?: string;              // Organized By
+  mode?: 'Online' | 'Offline' | 'Hybrid';
+  location?: string;               // Location & Venue
+  // Rounds: R-1, R-2, R-3, Final Event each with deadline + requirement
+  rounds?: CompetitionRound[];
+  finalEventDate?: string;         // ISO date
+  outcome?: string;                // The Overall Outcome
+  // Legacy / scraped fields
   website?: string;
   prize?: string;
   venue?: string;
   eligibility?: string;
   timeline?: string;
-  rounds?: { name: string; status?: string }[];
   fieldValues: Record<string, unknown>;
-  status?: string;
   isScraped?: boolean;
   scrapedUrl?: string;
   isArchived?: boolean;
   createdBy: string;
+  createdByName?: string;
 }
 
 export type Project = Entity;
+
 
 // ── Task Management System ────────────────────────────────────────────────────
 export type TaskStatus = 'backlog' | 'todo' | 'in-progress' | 'in-review' | 'done' | 'cancelled';
@@ -212,6 +243,14 @@ export interface Expense extends BaseDocument {
   createdBy: string;
 }
 
+export interface TeamContribution extends BaseDocument {
+  orgId: string;
+  teamName: string;
+  memberNames: string[];
+  associatedTransactionIds?: string[];
+  createdBy: string;
+}
+
 export interface Income extends BaseDocument {
   entityId?: string;
   projectId?: string;
@@ -275,7 +314,14 @@ export interface Notification extends BaseDocument {
   userId: string;
   title: string;
   body: string;
-  type: string;
+  type: string;        // e.g. 'competition_invite', 'invite_accepted', 'invite_declined', 'status_changed'
   read: boolean;
   link?: string;
+  eventId?: string;
+  eventName?: string;
+  workspaceId?: string;
+  senderId?: string;
+  senderName?: string;
+  actionRequired?: boolean;
+  invitedStatus?: 'pending' | 'accepted' | 'declined';
 }

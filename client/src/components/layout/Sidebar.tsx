@@ -3,7 +3,7 @@ import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, CheckSquare, Calendar, FileText,
-  BarChart3, DollarSign, Zap, Settings, Bell, ChevronLeft,
+  BarChart3, IndianRupee, Zap, Settings, Bell, ChevronLeft,
   ChevronRight, ChevronDown, Plus, User, LogOut, Layers, X,
   ArrowRight
 } from 'lucide-react';
@@ -29,14 +29,8 @@ const mainNav: { title?: string; items: NavItem[] }[] = [
       { label: 'My Tasks', href: '/tasks', icon: CheckSquare },
       { label: 'Calendar', href: '/calendar', icon: Calendar },
       { label: 'Documents', href: '/documents', icon: FileText },
-    ],
-  },
-  {
-    title: 'Platform',
-    items: [
       { label: 'Analytics', href: '/analytics', icon: BarChart3 },
-      { label: 'Finance', href: '/finance', icon: DollarSign },
-      { label: 'Automations', href: '/automations', icon: Zap },
+      { label: 'Finance', href: '/finance', icon: IndianRupee },
     ],
   },
 ];

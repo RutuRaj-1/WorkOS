@@ -9,7 +9,7 @@ import { COLLECTIONS } from '@/lib/collections';
 import { Entity, Task, Expense, Comment, WorkDocument } from '@/types';
 import DynamicFieldRenderer from '@/components/fields/DynamicFieldRenderer';
 import {
-  Trophy, Globe, CheckSquare, DollarSign, FileText, MessageSquare,
+  Trophy, Globe, CheckSquare, IndianRupee, FileText, MessageSquare,
   Zap, ExternalLink, Plus, Sparkles, User, ArrowLeft, Settings
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -140,7 +140,7 @@ export default function EntityPage() {
           { id: 'overview', label: 'Overview & Custom Fields', icon: Trophy },
           { id: 'tasks', label: `Tasks (${tasks.length})`, icon: CheckSquare },
           { id: 'knowledge', label: 'Knowledge & Notes', icon: FileText },
-          { id: 'finance', label: `Finance (₹${totalExpense})`, icon: DollarSign },
+          { id: 'finance', label: `Finance (₹${totalExpense})`, icon: IndianRupee },
           { id: 'discussion', label: `Discussion (${comments.length})`, icon: MessageSquare },
         ].map(tab => (
           <button
